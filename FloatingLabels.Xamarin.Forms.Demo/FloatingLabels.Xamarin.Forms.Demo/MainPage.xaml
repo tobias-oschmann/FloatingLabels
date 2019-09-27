@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fl="clr-namespace:FloatingLabels.Xamarin.Forms;assembly=FloatingLabels.Xamarin.Forms"
+             xmlns:cc="clr-namespace:FloatingLabels.Xamarin.Forms.Demo.CustomControls"
+             mc:Ignorable="d"
+             x:Class="FloatingLabels.Xamarin.Forms.Demo.MainPage"
+             x:Name="self">
+    <ScrollView>
+        <StackLayout Margin="30" Spacing="20">
+            <Grid>
+                <fl:FloatingLabelEntry Label="I am an Entry-Field"
+                                   Grid.Column="0"/>
+                <fl:FloatingLabelEntry Label="Another Entry-Field" 
+                                   Value="With prefilled data" 
+                                   Grid.Column="1"/>
+            </Grid>
+            
+            <fl:FloatingLabelEditor Label="I am a Multiline-Editor" MinimumRows="5" AutoSize="TextChanges"/>
+            
+            <Grid>
+                <fl:FloatingLabelCheckBox Label="Checkbox 1"
+                                      Value="True"
+                                      CheckedText="I am checked"
+                                      UncheckedText="I am not checked anymore"
+                                      Grid.Column="0"/>
+                <fl:FloatingLabelCheckBox Label="Checkbox 2" 
+                                      Grid.Column="1"/>
+                <fl:FloatingLabelCheckBox Label="Checkbox 3" 
+                                      CheckedText="True"
+                                      UncheckedText="False"
+                                      Grid.Column="2"/>                
+            </Grid>
+            
+            <fl:FloatingLabelSearchBar Label="This is a Search Bar"
+                                   SearchCommand="{Binding SearchCommand, Source={x:Reference self}}" />
+            
+            <Grid>
+                <fl:FloatingLabelPicker Label="Floating Picker Label" Grid.Column="0">
+                    <fl:FloatingLabelPicker.Items>
+                        <x:String>Hello World</x:String>
+                        <x:String>Foo Bar</x:String>
+                    </fl:FloatingLabelPicker.Items>
+                </fl:FloatingLabelPicker>
+                <fl:FloatingLabelPicker Label="Another Picker" Value="{Binding PickerValue, Source={x:Reference self}}" Grid.Column="1">
+                    <fl:FloatingLabelPicker.Items>
+                        <x:String>Red</x:String>
+                        <x:String>Green</x:String>
+                        <x:String>Blue</x:String>
+                    </fl:FloatingLabelPicker.Items>
+                </fl:FloatingLabelPicker>
+            </Grid>
+
+            <StackLayout Orientation="Horizontal">
+                <fl:FloatingLabelDatePicker Label="Date Picker" />
+                <fl:FloatingLabelTimePicker Label="Time Picker"  />
+            </StackLayout>
+
+            <fl:FloatingLabelContentView Label="Floating Label Content View">
+                <Button Text="This 'works' with all Elements"/>
+            </fl:FloatingLabelContentView>
+            <fl:FloatingLabelContentView Label="Customized Content">
+                <cc:CustomEntryForFloatingLabel Text="For it to really work you need to implement IFloatingLabelContent"/>
+            </fl:FloatingLabelContentView>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
