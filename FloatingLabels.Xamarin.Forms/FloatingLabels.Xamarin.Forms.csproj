@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Authors>Tobias Oschmann</Authors>
+    <Company />
+    <Copyright>Tobias Oschmann</Copyright>
+    <Version>0.0.1-alpha</Version>
+    <PackageTags>Xamarin Xamarin.Forms Forms XamarinForms Labels FloatingLabels</PackageTags>
+    <RepositoryUrl>https://github.com/tobias-oschmann/FloatingLabels</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description>A collection of controls for Xamarin.Forms that have a floating label above.</Description>
   </PropertyGroup>
 
   <ItemGroup>
