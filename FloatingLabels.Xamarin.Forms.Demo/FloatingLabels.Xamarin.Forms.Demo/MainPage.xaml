@@ -9,7 +9,7 @@
              x:Class="FloatingLabels.Xamarin.Forms.Demo.MainPage"
              x:Name="self">
     <ScrollView>
-        <StackLayout Margin="30" Spacing="20">
+        <StackLayout Margin="10" Spacing="5">
             <Grid>
                 <fl:FloatingLabelEntry Label="I am an Entry-Field"
                                    Grid.Column="0"/>
@@ -53,8 +53,8 @@
                 </fl:FloatingLabelPicker>
             </Grid>
 
-            <StackLayout Orientation="Horizontal">
-                <fl:FloatingLabelDatePicker Label="Date Picker" />
+            <StackLayout Orientation="Vertical">
+                <fl:FloatingLabelDatePicker Label="Date Picker" HorizontalContentOptions="Start" />
                 <fl:FloatingLabelTimePicker Label="Time Picker"  />
             </StackLayout>
 

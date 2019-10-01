@@ -48,7 +48,7 @@ namespace FloatingLabels.Xamarin.Forms
         }
 
         protected override BindableProperty ValueBindingProperty => LabelProperty;
-        protected override bool DisplayLabelInside(object value) => _ContentAsInterface?.DisplayLabelInside(value) ?? false;
+        protected override bool DisplayLabelInside(object value) => (!Content?.IsFocused ?? false) && (_ContentAsInterface?.DisplayLabelInside(value) ?? false);
 
         public FloatingLabelContentView()
         {

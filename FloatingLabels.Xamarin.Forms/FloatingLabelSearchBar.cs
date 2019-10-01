@@ -16,6 +16,8 @@ namespace FloatingLabels.Xamarin.Forms
 
         protected override BindableProperty ValueBindingProperty => SearchBar.TextProperty;
 
+        protected override int PlaceholderMarginLeft => Device.RuntimePlatform == Device.Android ? 50 : base.PlaceholderMarginLeft;
+
         public FloatingLabelSearchBar()
         {
             ctrlContent.SetBinding(SearchBar.SearchCommandProperty, new Binding() { Path = nameof(SearchCommand), Source = this });

@@ -14,6 +14,16 @@ namespace FloatingLabels.Xamarin.Forms
             get => (IList)GetValue(ItemsSourceProperty);
             set => SetValue(ItemsSourceProperty, value);
         }
+        
+        private static readonly BindableProperty SelectedIndexProperty =
+                BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(FloatingLabelPicker), defaultValue: default, defaultBindingMode: BindingMode.TwoWay);
+
+        public object SelectedIndex
+        {
+            get => GetValue(SelectedIndexProperty);
+            set => SetValue(SelectedIndexProperty, value);
+        }
+
 
         public IList<string> Items
         {
@@ -28,11 +38,14 @@ namespace FloatingLabels.Xamarin.Forms
             }
         }
 
+        public BindingBase ItemDisplayBinding { get => ctrlContent.ItemDisplayBinding; set => ctrlContent.ItemDisplayBinding = value; }
+
         protected override BindableProperty ValueBindingProperty => Picker.SelectedItemProperty;
 
         public FloatingLabelPicker()
         {
             ctrlContent.SetBinding(Picker.ItemsSourceProperty, new Binding() { Path = nameof(ItemsSource), Source = this });
+            ctrlContent.SetBinding(Picker.SelectedIndexProperty, new Binding() { Path = nameof(SelectedIndex), Source = this });
         }
     }
 }

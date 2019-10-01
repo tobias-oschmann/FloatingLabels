@@ -7,8 +7,22 @@ namespace FloatingLabels.Xamarin.Forms
 {
     public abstract class FloatingLabelBase<TContentView> : ContentView where TContentView : View, new()
     {
-        private readonly int _placeholderFontSize = 18;
-        private readonly int _titleFontSize = 15;
+        protected int PlaceholderFontSize
+        {
+            get
+            {
+                if (Device.RuntimePlatform == Device.UWP)
+                    return TitleFontSize;
+                return 16;
+            }
+        }
+        protected int TitleFontSize
+        {
+            get
+            {
+                return 14;
+            }
+        }
 
         protected int MarginTop
         {
@@ -20,9 +34,13 @@ namespace FloatingLabels.Xamarin.Forms
             }
         }
 
+        protected virtual int PlaceholderMarginLeft => 10;
+
         protected readonly Label ctrlLabel;
         protected readonly TContentView ctrlContent;
         protected Grid Grid => Content as Grid;
+
+        #region Bindable Properties
 
         public static readonly BindableProperty LabelProperty =
            BindableProperty.Create(nameof(Label), typeof(string), typeof(FloatingLabelBase<TContentView>), string.Empty, BindingMode.OneWay, null);
@@ -54,14 +72,36 @@ namespace FloatingLabels.Xamarin.Forms
             set => SetValue(ValueProperty, value);
         }
 
-        protected virtual bool DisplayLabelInside(object value)
+        public static readonly BindableProperty LabelColorProperty =
+            BindableProperty.Create(nameof(LabelColor), typeof(Color), typeof(FloatingLabelBase<TContentView>), defaultValue: Color.Default, defaultBindingMode: BindingMode.OneWay);
+
+        public Color LabelColor
         {
-            if (value == null)
-                return true;
-            if (value is string && string.IsNullOrWhiteSpace((string)value))
-                return true;
-            return false;
+            get => (Color)GetValue(LabelColorProperty);
+            set => SetValue(LabelColorProperty, value);
         }
+
+        private static readonly BindableProperty HorizontalContentOptionsProperty =
+            BindableProperty.Create(nameof(HorizontalContentOptions), typeof(LayoutOptions), typeof(FloatingLabelBase<TContentView>), defaultValue: LayoutOptions.Fill, defaultBindingMode: BindingMode.OneWay);
+
+        public LayoutOptions HorizontalContentOptions
+        {
+            get => (LayoutOptions)GetValue(HorizontalContentOptionsProperty);
+            set => SetValue(HorizontalContentOptionsProperty, value);
+        }
+
+        private static readonly BindableProperty VerticalContentOptionsProperty =
+                BindableProperty.Create(nameof(VerticalContentOptions), typeof(LayoutOptions), typeof(FloatingLabelBase<TContentView>), defaultValue: LayoutOptions.Fill, defaultBindingMode: BindingMode.OneWay);
+
+        public LayoutOptions VerticalContentOptions
+        {
+            get => (LayoutOptions)GetValue(VerticalContentOptionsProperty);
+            set => SetValue(VerticalContentOptionsProperty, value);
+        }
+
+
+
+        #endregion Bindable Properties
 
         public FloatingLabelBase()
         {
@@ -91,7 +131,10 @@ namespace FloatingLabels.Xamarin.Forms
 
             ctrlContent.SetBinding(ValueBindingProperty, new Binding() { Path = nameof(Value), Source = this, Mode = BindingMode.TwoWay, });
             ctrlContent.SetBinding(MinimumHeightRequestProperty, new Binding() { Path = nameof(MinimumHeightRequest), Source = this });
+            ctrlContent.SetBinding(HorizontalOptionsProperty, new Binding() { Path = nameof(HorizontalContentOptions), Source = this, });
+            ctrlContent.SetBinding(VerticalOptionsProperty, new Binding() { Path = nameof(VerticalContentOptions), Source = this, });
             ctrlLabel.SetBinding(global::Xamarin.Forms.Label.TextProperty, new Binding() { Path = nameof(Label), Source = this });
+            ctrlLabel.SetBinding(global::Xamarin.Forms.Label.TextColorProperty, new Binding() { Path = nameof(LabelColor), Source = this });
 
             ctrlContent.Focused += _OnFocused;
             ctrlContent.Unfocused += _OnUnfocused;
@@ -116,10 +159,18 @@ namespace FloatingLabels.Xamarin.Forms
             if (IsEnabled)
                 ctrlContent.Focus();
         }
+        protected virtual bool DisplayLabelInside(object value)
+        {
+            if (value == null)
+                return true;
+            if (value is string && string.IsNullOrWhiteSpace((string)value))
+                return true;
+            return false;
+        }
 
         protected async void _OnFocused(object sender, FocusEventArgs e)
         {
-            if (DisplayLabelInside(Value))
+            //if (DisplayLabelInside(Value))
                 await _TransitionToAbove(true);
         }
 
@@ -147,14 +198,14 @@ namespace FloatingLabels.Xamarin.Forms
             if (animated)
             {
                 var t1 = ctrlLabel.TranslateTo(0, MarginTop, 100);
-                var t2 = _SizeTo(_titleFontSize);
+                var t2 = _SizeTo(TitleFontSize);
                 await Task.WhenAll(t1, t2);
             }
             else
             {
                 ctrlLabel.TranslationX = 0;
                 ctrlLabel.TranslationY = MarginTop;
-                ctrlLabel.FontSize = _titleFontSize;
+                ctrlLabel.FontSize = TitleFontSize;
             }
             ctrlLabel.Opacity = 1;
             ctrlLabel.InputTransparent = false;
@@ -162,17 +213,18 @@ namespace FloatingLabels.Xamarin.Forms
 
         private async Task _TransitionToInside(bool animated)
         {
+            //animated = true;
             if (animated)
             {
-                var t1 = ctrlLabel.TranslateTo(10, 0, 100);
-                var t2 = _SizeTo(_placeholderFontSize);
+                var t1 = ctrlLabel.TranslateTo(PlaceholderMarginLeft, 0, 100);
+                var t2 = _SizeTo(PlaceholderFontSize);
                 await Task.WhenAll(t1, t2);
             }
             else
             {
-                ctrlLabel.TranslationX = 10;
+                ctrlLabel.TranslationX = PlaceholderMarginLeft;
                 ctrlLabel.TranslationY = 0;
-                ctrlLabel.FontSize = _placeholderFontSize;
+                ctrlLabel.FontSize = PlaceholderFontSize;
             }
             ctrlLabel.Opacity = 0.5;
             ctrlLabel.InputTransparent = true;
