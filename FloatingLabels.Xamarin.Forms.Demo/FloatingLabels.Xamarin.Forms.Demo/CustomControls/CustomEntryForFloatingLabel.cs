@@ -5,9 +5,11 @@ using Xamarin.Forms;
 
 namespace FloatingLabels.Xamarin.Forms.Demo.CustomControls
 {
-    public class CustomEntryForFloatingLabel : Entry, IFloatingLabelContent
+    public class CustomEntryForFloatingLabel : Entry, IFloatingLabelContent, IFloatingLabelPlaceholderMarginLeft
     {
         public object Value { get => Text; set => Text = value.ToString(); }
+
+        public int PlaceholderMarginLeft => 200;
 
         public CustomEntryForFloatingLabel()
         {

@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Authors>Tobias Oschmann</Authors>
     <Company />
     <Copyright>Tobias Oschmann</Copyright>
-    <Version>0.0.1-alpha</Version>
+    <Version>0.0.3-alpha</Version>
     <PackageTags>Xamarin Xamarin.Forms Forms XamarinForms Labels FloatingLabels</PackageTags>
     <RepositoryUrl>https://github.com/tobias-oschmann/FloatingLabels</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

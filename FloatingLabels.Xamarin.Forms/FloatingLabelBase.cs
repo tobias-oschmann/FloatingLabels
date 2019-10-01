@@ -81,7 +81,7 @@ namespace FloatingLabels.Xamarin.Forms
             set => SetValue(LabelColorProperty, value);
         }
 
-        private static readonly BindableProperty HorizontalContentOptionsProperty =
+        public static readonly BindableProperty HorizontalContentOptionsProperty =
             BindableProperty.Create(nameof(HorizontalContentOptions), typeof(LayoutOptions), typeof(FloatingLabelBase<TContentView>), defaultValue: LayoutOptions.Fill, defaultBindingMode: BindingMode.OneWay);
 
         public LayoutOptions HorizontalContentOptions
@@ -90,7 +90,7 @@ namespace FloatingLabels.Xamarin.Forms
             set => SetValue(HorizontalContentOptionsProperty, value);
         }
 
-        private static readonly BindableProperty VerticalContentOptionsProperty =
+        public static readonly BindableProperty VerticalContentOptionsProperty =
                 BindableProperty.Create(nameof(VerticalContentOptions), typeof(LayoutOptions), typeof(FloatingLabelBase<TContentView>), defaultValue: LayoutOptions.Fill, defaultBindingMode: BindingMode.OneWay);
 
         public LayoutOptions VerticalContentOptions

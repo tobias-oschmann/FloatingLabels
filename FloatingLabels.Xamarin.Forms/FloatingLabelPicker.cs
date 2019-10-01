@@ -14,8 +14,8 @@ namespace FloatingLabels.Xamarin.Forms
             get => (IList)GetValue(ItemsSourceProperty);
             set => SetValue(ItemsSourceProperty, value);
         }
-        
-        private static readonly BindableProperty SelectedIndexProperty =
+
+        public static readonly BindableProperty SelectedIndexProperty =
                 BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(FloatingLabelPicker), defaultValue: default, defaultBindingMode: BindingMode.TwoWay);
 
         public object SelectedIndex

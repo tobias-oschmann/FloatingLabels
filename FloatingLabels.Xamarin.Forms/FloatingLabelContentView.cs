@@ -15,6 +15,12 @@ namespace FloatingLabels.Xamarin.Forms
 
         object Value { get; set; }
     }
+
+    public interface IFloatingLabelPlaceholderMarginLeft
+    {
+        int PlaceholderMarginLeft { get; }
+    }
+
     public class FloatingLabelContentView : FloatingLabelBase<ContentView>
     {
         public static readonly new BindableProperty ContentProperty =
@@ -50,12 +56,15 @@ namespace FloatingLabels.Xamarin.Forms
         protected override BindableProperty ValueBindingProperty => LabelProperty;
         protected override bool DisplayLabelInside(object value) => (!Content?.IsFocused ?? false) && (_ContentAsInterface?.DisplayLabelInside(value) ?? false);
 
+        protected override int PlaceholderMarginLeft => _ContentAsMarginLeft?.PlaceholderMarginLeft ?? base.PlaceholderMarginLeft;
+
         public FloatingLabelContentView()
         {
             ctrlContent.SetBinding(ContentView.ContentProperty, new Binding() { Path = nameof(Content), Source = this });
         }
 
         private IFloatingLabelContent _ContentAsInterface => (Content as IFloatingLabelContent);
+        private IFloatingLabelPlaceholderMarginLeft _ContentAsMarginLeft => (Content as IFloatingLabelPlaceholderMarginLeft);
 
         private void _OnValueChanged(object sender, object oldValue, object newValue)
         {
