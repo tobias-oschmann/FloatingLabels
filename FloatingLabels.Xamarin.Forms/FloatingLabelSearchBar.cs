@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace FloatingLabels.Xamarin.Forms
 {
-    public class FloatingLabelSearchBar : FloatingLabelBase<SearchBar>
+    public class FloatingLabelSearchBar : FloatingLabelInputView<SearchBar>
     {
         public static readonly BindableProperty SearchCommandProperty =
             BindableProperty.Create(nameof(SearchCommand), typeof(ICommand), typeof(FloatingLabelEditor), null, BindingMode.OneWay);

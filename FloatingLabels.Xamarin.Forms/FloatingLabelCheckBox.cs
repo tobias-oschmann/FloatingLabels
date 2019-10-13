@@ -44,11 +44,16 @@ namespace FloatingLabels.Xamarin.Forms
 
             ctrlCheckBoxText = new Label();
             ctrlCheckBoxText.SetValue(Grid.ColumnProperty, 1);
-            ctrlCheckBoxText.Margin = new Thickness(0, Math.Abs(MarginTop) + 4, 0, 0);
+            ctrlCheckBoxText.Margin = new Thickness(0, Math.Abs(MarginTop) + 6, 0, 0);
             ctrlCheckBoxText.InputTransparent = true;
             Grid.Children.Add(ctrlCheckBoxText);
 
             _OnCheckedChanged(this, new CheckedChangedEventArgs(ctrlContent.IsChecked));
+        }
+
+        protected override void OnTextColorChanged(Color oldValue, Color newValue)
+        {
+            ctrlCheckBoxText.TextColor = newValue;
         }
 
         private void _OnCheckedChanged(object sender, CheckedChangedEventArgs e)

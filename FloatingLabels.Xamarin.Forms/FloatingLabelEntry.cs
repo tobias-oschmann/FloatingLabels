@@ -2,7 +2,7 @@
 
 namespace FloatingLabels.Xamarin.Forms
 {
-    public class FloatingLabelEntry : FloatingLabelBase<Entry>
+    public class FloatingLabelEntry : FloatingLabelInputView<Entry>
     {
         protected override BindableProperty ValueBindingProperty => Entry.TextProperty;
     }

@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace FloatingLabels.Xamarin.Forms
 {
-    public class FloatingLabelEditor : FloatingLabelBase<FloatingLabelEditor.BetterAutoSizingEditor>
+    public class FloatingLabelEditor : FloatingLabelInputView<FloatingLabelEditor.BetterAutoSizingEditor>
     {
         public class BetterAutoSizingEditor : Editor
         {

@@ -72,6 +72,8 @@ namespace FloatingLabels.Xamarin.Forms
             set => SetValue(ValueProperty, value);
         }
 
+
+
         public static readonly BindableProperty LabelColorProperty =
             BindableProperty.Create(nameof(LabelColor), typeof(Color), typeof(FloatingLabelBase<TContentView>), defaultValue: Color.Default, defaultBindingMode: BindingMode.OneWay);
 
@@ -80,6 +82,32 @@ namespace FloatingLabels.Xamarin.Forms
             get => (Color)GetValue(LabelColorProperty);
             set => SetValue(LabelColorProperty, value);
         }
+
+
+        public static readonly BindableProperty TextColorProperty =
+        BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(FloatingLabelBase<TContentView>), defaultValue: Color.Default, defaultBindingMode: BindingMode.TwoWay, propertyChanged: _OnTextColorChanged);
+
+        private static void _OnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (bindable is FloatingLabelBase<TContentView> fl)
+                fl.OnTextColorChanged((Color)oldValue, (Color)newValue);
+        }
+
+        public Color TextColor
+        {
+            get => (Color)GetValue(TextColorProperty);
+            set => SetValue(TextColorProperty, value);
+        }
+
+        protected virtual void OnTextColorChanged(Color oldValue, Color newValue) 
+        {
+            var textColorProp = ctrlContent.GetType().GetProperty(nameof(TextColor));
+            if (textColorProp == null)
+                return;
+            textColorProp.SetValue(ctrlContent, newValue);
+        }
+
+
 
         public static readonly BindableProperty HorizontalContentOptionsProperty =
             BindableProperty.Create(nameof(HorizontalContentOptions), typeof(LayoutOptions), typeof(FloatingLabelBase<TContentView>), defaultValue: LayoutOptions.Fill, defaultBindingMode: BindingMode.OneWay);
@@ -133,6 +161,7 @@ namespace FloatingLabels.Xamarin.Forms
             ctrlContent.SetBinding(MinimumHeightRequestProperty, new Binding() { Path = nameof(MinimumHeightRequest), Source = this });
             ctrlContent.SetBinding(HorizontalOptionsProperty, new Binding() { Path = nameof(HorizontalContentOptions), Source = this, });
             ctrlContent.SetBinding(VerticalOptionsProperty, new Binding() { Path = nameof(VerticalContentOptions), Source = this, });
+            
             ctrlLabel.SetBinding(global::Xamarin.Forms.Label.TextProperty, new Binding() { Path = nameof(Label), Source = this });
             ctrlLabel.SetBinding(global::Xamarin.Forms.Label.TextColorProperty, new Binding() { Path = nameof(LabelColor), Source = this });
 

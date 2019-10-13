@@ -12,12 +12,20 @@
         <StackLayout Margin="10" Spacing="5">
             <Grid>
                 <fl:FloatingLabelEntry Label="I am an Entry-Field"
+                                       TextColor="Fuchsia"
                                    Grid.Column="0"/>
-                <fl:FloatingLabelEntry Label="Another Entry-Field" 
+                <fl:FloatingLabelEntry Label="An E-Mail Field" 
                                    Value="With prefilled data" 
+                                       Keyboard="Email"
                                    Grid.Column="1"/>
             </Grid>
-            
+
+            <fl:FloatingLabelEntry Label="Numeric Entry"
+                                   Keyboard="Numeric" />
+            <fl:FloatingLabelEntry Label="Url Entry with MaxLength (5)"
+                                   MaxLength="5"
+                                   Keyboard="Url" />
+
             <fl:FloatingLabelEditor Label="I am a Multiline-Editor" MinimumRows="5" AutoSize="TextChanges"/>
             
             <Grid>
@@ -28,9 +36,10 @@
                                       Grid.Column="0"/>
                 <fl:FloatingLabelCheckBox Label="Checkbox 2" 
                                       Grid.Column="1"/>
-                <fl:FloatingLabelCheckBox Label="Checkbox 3" 
+                <fl:FloatingLabelCheckBox Label="Colored Checkbox" 
                                       CheckedText="True"
                                       UncheckedText="False"
+                                          TextColor="DarkRed"
                                       Grid.Column="2"/>                
             </Grid>
             
