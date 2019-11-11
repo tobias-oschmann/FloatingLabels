@@ -5,6 +5,17 @@ namespace FloatingLabels.Xamarin.Forms
 {
     public class FloatingLabelCheckBox : FloatingLabelBase<CheckBox>
     {
+        protected override int MarginTop
+        {
+            get
+            {
+                if (Device.RuntimePlatform == Device.Android)
+                    return -22;
+                return base.MarginTop;
+            }
+        }
+
+
         public static readonly BindableProperty CheckedTextProperty =
            BindableProperty.Create(nameof(CheckedText), typeof(string), typeof(FloatingLabelCheckBox), string.Empty, BindingMode.OneWay, propertyChanged: (s, n, o) => (s as FloatingLabelCheckBox)._RefreshText());
 

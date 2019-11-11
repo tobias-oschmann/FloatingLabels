@@ -5,8 +5,15 @@ using Xamarin.Forms;
 
 namespace FloatingLabels.Xamarin.Forms
 {
+    public enum ValidationTriggerMode
+    {
+        Initial, OnPropertyChanged, OnInputLostFocus
+    }
+
     public abstract class FloatingLabelBase<TContentView> : ContentView where TContentView : View, new()
     {
+        private bool _shouldDisplayValidationMessage = false;
+
         protected int PlaceholderFontSize
         {
             get
@@ -24,7 +31,7 @@ namespace FloatingLabels.Xamarin.Forms
             }
         }
 
-        protected int MarginTop
+        protected virtual int MarginTop
         {
             get
             {
@@ -38,6 +45,7 @@ namespace FloatingLabels.Xamarin.Forms
 
         protected readonly Label ctrlLabel;
         protected readonly TContentView ctrlContent;
+        protected readonly Label ctrlValidationMessage;
         protected Grid Grid => Content as Grid;
 
         #region Bindable Properties
@@ -64,12 +72,69 @@ namespace FloatingLabels.Xamarin.Forms
                 else
                     await control._TransitionToInside(false);
             }
+            else if (control.ValidationTriggerMode == ValidationTriggerMode.OnPropertyChanged)
+            {
+                control._shouldDisplayValidationMessage = true;
+                control.OnPropertyChanged(nameof(ValidationMessage));
+            }
         }
 
         public object Value
         {
             get => GetValue(ValueProperty);
             set => SetValue(ValueProperty, value);
+        }
+
+
+        public static readonly BindableProperty ValidationColorProperty =
+                BindableProperty.Create(nameof(ValidationColor), typeof(Color), typeof(FloatingLabelBase<TContentView>), defaultValue: Color.Red, defaultBindingMode: BindingMode.OneWay);
+
+        public Color ValidationColor
+        {
+            get => (Color)GetValue(ValidationColorProperty);
+            set => SetValue(ValidationColorProperty, value);
+        }
+
+
+        public static readonly BindableProperty ValidationMessageProperty =
+                BindableProperty.Create(nameof(ValidationMessage), typeof(string), typeof(FloatingLabelBase<TContentView>), defaultValue: null, defaultBindingMode: BindingMode.OneWay, propertyChanged: _OnValidationMessageChanged);
+
+        private static void _OnValidationMessageChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (!(bindable is FloatingLabelBase<TContentView> control))
+                return;
+            control.ctrlValidationMessage.IsVisible = true;
+            if (control.ValidationTriggerMode == ValidationTriggerMode.Initial)
+            {
+                control._shouldDisplayValidationMessage = true;
+                control.OnPropertyChanged(nameof(ValidationMessage));
+            }
+        }
+
+        public string ValidationMessage
+        {
+            get => _shouldDisplayValidationMessage ? (string)GetValue(ValidationMessageProperty) : string.Empty;
+            set => SetValue(ValidationMessageProperty, value);
+        }
+
+        public static readonly BindableProperty ValidationTriggerModeProperty =
+                 BindableProperty.Create(nameof(ValidationTriggerMode), typeof(ValidationTriggerMode), typeof(FloatingLabelBase<TContentView>), defaultValue: ValidationTriggerMode.Initial, defaultBindingMode: BindingMode.OneWay, propertyChanged: _OnValidationTriggerModeChanged);
+
+        private static void _OnValidationTriggerModeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (!(bindable is FloatingLabelBase<TContentView> control))
+                return;
+            if (control.ValidationTriggerMode != ValidationTriggerMode.Initial)
+            {
+                control._shouldDisplayValidationMessage = false;
+                control.OnPropertyChanged(nameof(ValidationMessage));
+            }
+        }
+
+        public ValidationTriggerMode ValidationTriggerMode
+        {
+            get => (ValidationTriggerMode)GetValue(ValidationTriggerModeProperty);
+            set => SetValue(ValidationTriggerModeProperty, value);
         }
 
 
@@ -99,7 +164,7 @@ namespace FloatingLabels.Xamarin.Forms
             set => SetValue(TextColorProperty, value);
         }
 
-        protected virtual void OnTextColorChanged(Color oldValue, Color newValue) 
+        protected virtual void OnTextColorChanged(Color oldValue, Color newValue)
         {
             var textColorProp = ctrlContent.GetType().GetProperty(nameof(TextColor));
             if (textColorProp == null)
@@ -119,7 +184,7 @@ namespace FloatingLabels.Xamarin.Forms
         }
 
         public static readonly BindableProperty VerticalContentOptionsProperty =
-                BindableProperty.Create(nameof(VerticalContentOptions), typeof(LayoutOptions), typeof(FloatingLabelBase<TContentView>), defaultValue: LayoutOptions.Fill, defaultBindingMode: BindingMode.OneWay);
+                BindableProperty.Create(nameof(VerticalContentOptions), typeof(LayoutOptions), typeof(FloatingLabelBase<TContentView>), defaultValue: LayoutOptions.Start, defaultBindingMode: BindingMode.OneWay);
 
         public LayoutOptions VerticalContentOptions
         {
@@ -161,16 +226,27 @@ namespace FloatingLabels.Xamarin.Forms
             ctrlContent.SetBinding(MinimumHeightRequestProperty, new Binding() { Path = nameof(MinimumHeightRequest), Source = this });
             ctrlContent.SetBinding(HorizontalOptionsProperty, new Binding() { Path = nameof(HorizontalContentOptions), Source = this, });
             ctrlContent.SetBinding(VerticalOptionsProperty, new Binding() { Path = nameof(VerticalContentOptions), Source = this, });
-            
+
             ctrlLabel.SetBinding(global::Xamarin.Forms.Label.TextProperty, new Binding() { Path = nameof(Label), Source = this });
             ctrlLabel.SetBinding(global::Xamarin.Forms.Label.TextColorProperty, new Binding() { Path = nameof(LabelColor), Source = this });
 
             ctrlContent.Focused += _OnFocused;
             ctrlContent.Unfocused += _OnUnfocused;
 
-            var tapGesture = new TapGestureRecognizer();
-            tapGesture.Tapped += _OnLabelTapped;
-            ctrlLabel.GestureRecognizers.Add(tapGesture);
+            //var tapGesture = new TapGestureRecognizer();
+            //tapGesture.Tapped += _OnLabelTapped;
+            //ctrlLabel.GestureRecognizers.Add(tapGesture);
+
+            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Auto) });
+            ctrlValidationMessage = new Label {
+                Margin = new Thickness(PlaceholderMarginLeft, (Device.RuntimePlatform == Device.UWP ? -2 : -10), PlaceholderMarginLeft, 4),
+                FontSize = 12,
+                IsVisible = false,
+            };
+            Grid.SetRow(ctrlValidationMessage, grid.RowDefinitions.Count - 1);
+            ctrlValidationMessage.SetBinding(global::Xamarin.Forms.Label.TextProperty, new Binding() { Path = nameof(ValidationMessage), Source = this });
+            ctrlValidationMessage.SetBinding(global::Xamarin.Forms.Label.TextColorProperty, new Binding() { Path = nameof(ValidationColor), Source = this });
+            grid.Children.Add(ctrlValidationMessage);
 
             RefreshLabelPosition(false);
         }
@@ -200,13 +276,18 @@ namespace FloatingLabels.Xamarin.Forms
         protected async void _OnFocused(object sender, FocusEventArgs e)
         {
             //if (DisplayLabelInside(Value))
-                await _TransitionToAbove(true);
+            await _TransitionToAbove(true);
         }
 
         protected async void _OnUnfocused(object sender, FocusEventArgs e)
         {
             if (DisplayLabelInside(Value))
                 await _TransitionToInside(true);
+            if (ValidationTriggerMode == ValidationTriggerMode.OnInputLostFocus)
+            {
+                _shouldDisplayValidationMessage = true;
+                OnPropertyChanged(nameof(ValidationMessage));
+            }
         }
 
         private void _OnLabelTapped(object sender, EventArgs e)
@@ -237,7 +318,7 @@ namespace FloatingLabels.Xamarin.Forms
                 ctrlLabel.FontSize = TitleFontSize;
             }
             ctrlLabel.Opacity = 1;
-            ctrlLabel.InputTransparent = false;
+            //ctrlLabel.InputTransparent = false;
         }
 
         private async Task _TransitionToInside(bool animated)
@@ -256,7 +337,7 @@ namespace FloatingLabels.Xamarin.Forms
                 ctrlLabel.FontSize = PlaceholderFontSize;
             }
             ctrlLabel.Opacity = 0.5;
-            ctrlLabel.InputTransparent = true;
+            //ctrlLabel.InputTransparent = true;
         }
 
         private Task _SizeTo(int fontSize)

@@ -47,6 +47,8 @@ namespace FloatingLabels.Xamarin.Forms
             set => SetValue(KeyboardProperty, value);
         }
 
+
+
         public FloatingLabelInputView()
         {
             ctrlContent.SetBinding(InputView.IsReadOnlyProperty, new Binding() { Path = nameof(IsReadOnly), Source = this, });

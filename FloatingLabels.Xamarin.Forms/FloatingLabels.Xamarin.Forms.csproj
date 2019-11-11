@@ -7,11 +7,14 @@
     <Authors>Tobias Oschmann</Authors>
     <Company />
     <Copyright>Tobias Oschmann</Copyright>
-    <Version>0.0.3-alpha</Version>
+    <Version>0.2.0-alpha</Version>
     <PackageTags>Xamarin Xamarin.Forms Forms XamarinForms Labels FloatingLabels</PackageTags>
     <RepositoryUrl>https://github.com/tobias-oschmann/FloatingLabels</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>A collection of controls for Xamarin.Forms that have a floating label above.</Description>
+    <PackageReleaseNotes>Added ValidationMessage Property for displaying a red text underneath the control.
+The color can be changed though.
+It's also possible to define when the message should be shown: initially, after the property changed or when the input control lost focus.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

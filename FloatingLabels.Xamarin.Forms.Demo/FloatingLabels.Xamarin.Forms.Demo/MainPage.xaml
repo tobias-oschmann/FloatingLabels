@@ -8,53 +8,70 @@
              mc:Ignorable="d"
              x:Class="FloatingLabels.Xamarin.Forms.Demo.MainPage"
              x:Name="self">
+    <ContentPage.Resources>
+        <Style TargetType="{x:Type fl:FloatingLabelEntry}">
+            <Setter Property="ValidationTriggerMode" Value="OnInputLostFocus"></Setter>
+        </Style>
+    </ContentPage.Resources>
     <ScrollView>
-        <StackLayout Margin="10" Spacing="5">
+        <StackLayout Margin="10"
+                     Spacing="5">
             <Grid>
                 <fl:FloatingLabelEntry Label="I am an Entry-Field"
                                        TextColor="Fuchsia"
-                                   Grid.Column="0"/>
-                <fl:FloatingLabelEntry Label="An E-Mail Field" 
-                                   Value="With prefilled data" 
+                                       ValidationMessage="And I have a validation message!"
+                                       Grid.Column="0" />
+                <fl:FloatingLabelEntry Label="An E-Mail Field"
+                                       Value="With prefilled data"
                                        Keyboard="Email"
-                                   Grid.Column="1"/>
+                                       Grid.Column="1" />
             </Grid>
 
             <fl:FloatingLabelEntry Label="Numeric Entry"
+                                   ValidationMessage="Another Validation after property changed"
+                                   ValidationColor="Aquamarine"
                                    Keyboard="Numeric" />
             <fl:FloatingLabelEntry Label="Url Entry with MaxLength (5)"
                                    MaxLength="5"
                                    Keyboard="Url" />
 
-            <fl:FloatingLabelEditor Label="I am a Multiline-Editor" MinimumRows="5" AutoSize="TextChanges"/>
-            
+            <fl:FloatingLabelEditor Label="I am a Multiline-Editor"
+                                    MinimumRows="5"
+                                    AutoSize="TextChanges"
+                                    ValidationMessage="Validation on Editor (after losing focus)"
+                                    ValidationTriggerMode="OnInputLostFocus"/>
+
             <Grid>
                 <fl:FloatingLabelCheckBox Label="Checkbox 1"
-                                      Value="True"
-                                      CheckedText="I am checked"
-                                      UncheckedText="I am not checked anymore"
-                                      Grid.Column="0"/>
-                <fl:FloatingLabelCheckBox Label="Checkbox 2" 
-                                      Grid.Column="1"/>
-                <fl:FloatingLabelCheckBox Label="Colored Checkbox" 
-                                      CheckedText="True"
-                                      UncheckedText="False"
+                                          Value="True"
+                                          CheckedText="I am checked"
+                                          UncheckedText="I am not checked anymore"
+                                          Grid.Column="0" />
+                <fl:FloatingLabelCheckBox Label="Checkbox 2"
+                                          Grid.Column="1" />
+                <fl:FloatingLabelCheckBox Label="Colored Checkbox"
+                                          CheckedText="True"
+                                          UncheckedText="False"
                                           TextColor="DarkRed"
-                                      Grid.Column="2"/>                
+                                          Grid.Column="2" />
             </Grid>
-            
+
             <fl:FloatingLabelSearchBar Label="This is a Search Bar"
-                                   SearchCommand="{Binding SearchCommand, Source={x:Reference self}}" />
-            
+                                       SearchCommand="{Binding SearchCommand, Source={x:Reference self}}" />
+
             <Grid>
-                <fl:FloatingLabelPicker Label="Floating Picker Label" Grid.Column="0">
+                <fl:FloatingLabelPicker Label="Floating Picker Label"
+                                        Grid.Column="0">
                     <fl:FloatingLabelPicker.Items>
                         <x:String>Hello World</x:String>
                         <x:String>Foo Bar</x:String>
                     </fl:FloatingLabelPicker.Items>
                 </fl:FloatingLabelPicker>
-                <fl:FloatingLabelPicker Label="Another Picker" Value="{Binding PickerValue, Source={x:Reference self}}" Grid.Column="1">
-                    <fl:FloatingLabelPicker.Items>
+                <fl:FloatingLabelPicker Label="Another Picker"
+                                        Value="{Binding PickerValue, Source={x:Reference self}}"
+                                        Grid.Column="1"
+                                        ValidationMessage="Validation on Picker" >
+                <fl:FloatingLabelPicker.Items>
                         <x:String>Red</x:String>
                         <x:String>Green</x:String>
                         <x:String>Blue</x:String>
@@ -63,15 +80,16 @@
             </Grid>
 
             <StackLayout Orientation="Vertical">
-                <fl:FloatingLabelDatePicker Label="Date Picker" HorizontalContentOptions="Start" />
-                <fl:FloatingLabelTimePicker Label="Time Picker"  />
+                <fl:FloatingLabelDatePicker Label="Date Picker"
+                                            HorizontalContentOptions="Start" />
+                <fl:FloatingLabelTimePicker Label="Time Picker" />
             </StackLayout>
 
             <fl:FloatingLabelContentView Label="Floating Label Content View">
-                <Button Text="This 'works' with all Elements"/>
+                <Button Text="This 'works' with all Elements" />
             </fl:FloatingLabelContentView>
             <fl:FloatingLabelContentView Label="Customized Content">
-                <cc:CustomEntryForFloatingLabel Text="For it to really work you need to implement IFloatingLabelContent"/>
+                <cc:CustomEntryForFloatingLabel Text="For it to really work you need to implement IFloatingLabelContent" />
             </fl:FloatingLabelContentView>
         </StackLayout>
     </ScrollView>
